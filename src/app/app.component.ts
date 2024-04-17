@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, Signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -21,6 +21,7 @@ import { RouterOutlet } from '@angular/router';
     }
 
   </ul>
+  {{this.b()}}
   `,
   styleUrl: './app.component.scss'
 })
@@ -58,4 +59,9 @@ export class AppComponent {
     console.log(this.items());
     
   }
+
+  a: Signal<string> = signal('a')
+  b: Signal<string> = computed(() => this.a() + this.c())
+  c: Signal<string> = computed(() => this.a() + this.b())
+
 }
