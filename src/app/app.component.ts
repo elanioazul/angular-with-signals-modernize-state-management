@@ -8,17 +8,19 @@ import { RouterOutlet } from '@angular/router';
   imports: [CommonModule, RouterOutlet],
   template: `
   <h1>Angular signals</h1>
-  <!-- {{item()}}
-  {{item()?.toLocaleLowerCase()}} -->
 
   last: {{lastItem()?.name}}
+  <br>
 
   <button (click)="this.handleClick()">log items</button>
   <button (click)="clearItems()">clear items</button>
+  <br>
+  Añade items:
   <input type="text" [value]="newItem()" (input)="updateNewItemName($event)">
-  <input type="text" [value]="nameFilter()" (input)="updateNameFilter($event)">
   <button (click)="append(newItem())">append new</button>
-
+  <br>
+  Fitra items:
+  <input type="text" [value]="nameFilter()" (input)="updateNameFilter($event)">
   <ul>
     @for(item of visibleItems(); track 'id') {
       <li>{{item.name}}</li>
@@ -37,6 +39,8 @@ export class AppComponent {
     {id: 3, name: 'Willy'},
 
   ])
+
+  readonlyItems = this.items.asReadonly();
 
   clearItems() {
     this.items.set([])
@@ -77,7 +81,8 @@ export class AppComponent {
 
   handleClick(): void {
     console.log(this.items());
-    
+    console.log(this.readonlyItems());
+    this.readonlyItems
   }
 
 
