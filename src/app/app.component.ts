@@ -16,7 +16,7 @@ import { RouterOutlet } from '@angular/router';
   <button (click)="this.handleClick()">log items</button>
 
   <ul>
-    @for(item of filteredItems(); track 'id') {
+    @for(item of visibleItems(); track 'id') {
       <li>{{item.name}}</li>
     }
 
@@ -36,12 +36,21 @@ export class AppComponent {
 
   lastItem = computed(() => this.items().slice(-1)[0]);
 
-  nameFilter = signal('Willy')
+  nameFilter = signal('')
 
   filteredItems = computed(() => {
     const nameFilter = this.nameFilter().toLocaleLowerCase();
     return this.items().filter((item) => {
       return item.name.toLocaleLowerCase().includes(nameFilter)
+    })
+  })
+
+  ascOrder = signal(false);
+
+  visibleItems = computed(() => {
+    const order = this.ascOrder() ? 1 : -1;
+    return this.filteredItems().sort((a, b) => {
+      return a.name.localeCompare(b.name) * order
     })
   })
 
