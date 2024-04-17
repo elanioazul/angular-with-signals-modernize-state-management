@@ -11,9 +11,13 @@ import { RouterOutlet } from '@angular/router';
   <!-- {{item()}}
   {{item()?.toLocaleLowerCase()}} -->
 
-  last: {{lastItem().name}}
+  last: {{lastItem()?.name}}
 
   <button (click)="this.handleClick()">log items</button>
+  <button (click)="clearItems()">clear items</button>
+  <input type="text" [value]="newItem()" (input)="updateNewItemName($event)">
+  <input type="text" [value]="nameFilter()" (input)="updateNameFilter($event)">
+  <button (click)="append(newItem())">append new</button>
 
   <ul>
     @for(item of visibleItems(); track 'id') {
@@ -21,7 +25,6 @@ import { RouterOutlet } from '@angular/router';
     }
 
   </ul>
-  {{this.b()}}
   `,
   styleUrl: './app.component.scss'
 })
@@ -35,9 +38,26 @@ export class AppComponent {
 
   ])
 
+  clearItems() {
+    this.items.set([])
+  }
+
+  newItem = signal('');
+  updateNewItemName(event: Event) {
+    this.newItem.set((event.target as HTMLInputElement)['value'])
+  }
+
+  append(val: string) {
+    this.items.update(prev => [...prev, {id: prev.length + 1, name: val}])
+  }
+
   lastItem = computed(() => this.items().slice(-1)[0]);
 
-  nameFilter = signal('')
+  nameFilter = signal('');
+
+  updateNameFilter(event: Event) {
+    this.nameFilter.set((event.target as HTMLInputElement)['value'])
+  }
 
   filteredItems = computed(() => {
     const nameFilter = this.nameFilter().toLocaleLowerCase();
@@ -60,8 +80,5 @@ export class AppComponent {
     
   }
 
-  a: Signal<string> = signal('a')
-  b: Signal<string> = computed(() => this.a() + this.c())
-  c: Signal<string> = computed(() => this.a() + this.b())
 
 }
