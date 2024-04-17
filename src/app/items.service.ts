@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, effect, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -21,5 +21,20 @@ export class ItemsService {
     this.#items.update(prev => [...prev, {id: prev.length + 1, name: val}])
   }
 
-  constructor() { }
+  example = signal(123)
+
+  consoleEffectLog = effect(() => {
+    console.log(this.items());
+    console.log(this.example());
+    
+  })
+
+  constructor() {
+    // effect(() => {
+    //   console.log(this.items());
+    //   console.log(this.example());
+      
+    // })
+    this.consoleEffectLog;
+   }
 }
