@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal, Signal } from '@angular/core';
+import { Component, computed, signal, Signal, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-
+import { ItemsService } from './items.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -13,11 +13,11 @@ import { RouterOutlet } from '@angular/router';
   <br>
 
   <button (click)="this.handleClick()">log items</button>
-  <button (click)="clearItems()">clear items</button>
+  <button (click)="this.itemsService.clearItems()">clear items</button>
   <br>
   Añade items:
   <input type="text" [value]="newItem()" (input)="updateNewItemName($event)">
-  <button (click)="append(newItem())">append new</button>
+  <button (click)="this.itemsService.append(newItem())">append new</button>
   <br>
   Fitra items:
   <input type="text" [value]="nameFilter()" (input)="updateNameFilter($event)">
@@ -31,31 +31,15 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  itemsService = inject(ItemsService);
   item = signal<string | undefined>('hey');
-
-  items = signal([
-    {id: 1, name: 'Andy'},
-    {id: 2, name: 'Hugo'},
-    {id: 3, name: 'Willy'},
-
-  ])
-
-  readonlyItems = this.items.asReadonly();
-
-  clearItems() {
-    this.items.set([])
-  }
 
   newItem = signal('');
   updateNewItemName(event: Event) {
     this.newItem.set((event.target as HTMLInputElement)['value'])
   }
 
-  append(val: string) {
-    this.items.update(prev => [...prev, {id: prev.length + 1, name: val}])
-  }
-
-  lastItem = computed(() => this.items().slice(-1)[0]);
+  lastItem = computed(() => this.itemsService.items().slice(-1)[0]);
 
   nameFilter = signal('');
 
@@ -65,7 +49,7 @@ export class AppComponent {
 
   filteredItems = computed(() => {
     const nameFilter = this.nameFilter().toLocaleLowerCase();
-    return this.items().filter((item) => {
+    return this.itemsService.items().filter((item: any) => {
       return item.name.toLocaleLowerCase().includes(nameFilter)
     })
   })
@@ -74,15 +58,13 @@ export class AppComponent {
 
   visibleItems = computed(() => {
     const order = this.ascOrder() ? 1 : -1;
-    return this.filteredItems().sort((a, b) => {
+    return this.filteredItems().sort((a: any, b: any) => {
       return a.name.localeCompare(b.name) * order
     })
   })
 
   handleClick(): void {
-    console.log(this.items());
-    console.log(this.readonlyItems());
-    this.readonlyItems
+    console.log(this.itemsService.items());
   }
 
 
