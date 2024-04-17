@@ -12,6 +12,7 @@ import { RouterOutlet } from '@angular/router';
   @if (item) {
     {{item.toLocaleLowerCase}}
   }
+  <button (click)="this.handleClick()">log items</button>
   <ul>
     @for (item of items(); track 'id') {
       <li>{{item.name}}</li>
@@ -32,4 +33,8 @@ export class AppComponent {
     {id: 3, name: 'Willy'},
 
   ])
+  handleClick(): void {
+    console.log(this.items());
+    
+  }
 }
