@@ -8,10 +8,23 @@ import { RouterOutlet } from '@angular/router';
   imports: [CommonModule, RouterOutlet],
   template: `
   <h1>Angular signals</h1>
-  
+  {{item()}}
+  {{item()?.toLocaleLowerCase}}
+  <ul>
+    @for (item of items(); track 'id') {
+      <li>{{item.name}}</li>
+    }
+
+  </ul>
   `,
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  item = signal<string | undefined>(undefined)
+  item = signal<string | undefined>('hey');
+  items = signal([
+    {id: 1, name: 'Andy'},
+    {id: 2, name: 'Hugo'},
+    {id: 3, name: 'Willy'},
+
+  ])
 }
