@@ -1,4 +1,4 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, effect, signal, untracked } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
@@ -29,12 +29,5 @@ export class ItemsService {
     
   })
 
-  constructor() {
-    // effect(() => {
-    //   console.log(this.items());
-    //   console.log(this.example());
-      
-    // })
-    this.consoleEffectLog;
-   }
+  constructor() {}
 }
