@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal, Signal, inject } from '@angular/core';
+import { Component, computed, signal, Signal, inject, effect, untracked } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ItemsService } from './items.service';
 @Component({
@@ -40,6 +40,13 @@ export class AppComponent {
   }
 
   lastItem = computed(() => this.itemsService.items().slice(-1)[0]);
+
+  consoleEffectLog = effect(() => {
+    console.log(
+      this.nameFilter(), 
+      untracked(() => this.itemsService.items()));
+    
+  })
 
   nameFilter = signal('');
 

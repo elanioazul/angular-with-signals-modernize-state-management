@@ -23,11 +23,5 @@ export class ItemsService {
 
   example = signal(123)
 
-  consoleEffectLog = effect(() => {
-    console.log(untracked(() => this.items()));
-    console.log(this.example());
-    
-  })
-
   constructor() {}
 }
